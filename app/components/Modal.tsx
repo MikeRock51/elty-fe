@@ -44,7 +44,7 @@ export const Modal = ({ isOpen, onClose, selectedPages }: ModalProps) => {
         </ul>
         <button
           onClick={onClose}
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+          className="mt-4 bg-[#FFCE22] hover:bg-[#FFD84D] active:bg-[#FFD84D] text-white py-2 px-4 rounded"
         >
           Close
         </button>
