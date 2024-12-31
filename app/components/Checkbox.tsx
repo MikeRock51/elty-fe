@@ -6,10 +6,14 @@ interface CheckboxProps {
   checked: boolean;
   onChange: () => void;
   label: string;
+  isAllPagesHovered?: boolean;
 }
 
-export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
+export const Checkbox = ({ checked, onChange, label, isAllPagesHovered = false }: CheckboxProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   const [currentVariant, setCurrentVariant] = useState<CheckboxVariant>('default');
+
+  const effectiveHoverState = isHovered || isAllPagesHovered;
 
   const getCheckboxStyles = () => {
     const baseStyles = "w-4 h-4 border rounded flex items-center justify-center transition-none duration-0";
@@ -20,7 +24,7 @@ export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
       case 'variant4': // clicked
         return `${baseStyles} ${checked ? 'bg-blue-500 border-blue-500' : 'border-gray-300 bg-white'}`;
       case 'variant5': // mouse out
-        return `${baseStyles} border-gray-300 bg-white`;
+        return `${baseStyles} ${checked ? 'bg-blue-500 border-blue-500' : 'border-gray-300 bg-white'}`;
       case 'variant6': // hover on checked
         return `${baseStyles} bg-blue-600 border-blue-600`;
       case 'variant7': // pressing on checked
@@ -28,29 +32,30 @@ export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
       case 'variant8': // hover
         return `${baseStyles} border-gray-400 bg-white`;
       case 'variant9': // pressing or mouse out
-        return `${baseStyles} border-gray-300 bg-white`;
+        return `${baseStyles} ${checked ? 'bg-blue-500 border-blue-500' : 'border-gray-300 bg-white'}`;
       default:
-        return `${baseStyles} border-gray-300 bg-white`;
+        return `${baseStyles} ${checked ? 'bg-blue-500 border-blue-500' : 'border-gray-300 bg-white'}`;
     }
   };
 
   const getCheckmarkColor = () => {
-    switch (currentVariant) {
-      case 'variant4':
-      case 'variant6':
-      case 'variant7':
-        return 'text-white';
-      default:
-        return 'text-gray-500';
+    if (checked) {
+      return 'text-white';
+    } else if (effectiveHoverState) {
+      return 'text-gray-200';
+    } else {
+      return 'text-gray-500';
     }
   };
 
   const handleMouseEnter = () => {
+    setIsHovered(true);
     setCurrentVariant(checked ? 'variant6' : 'variant2');
   };
 
   const handleMouseLeave = () => {
-    setCurrentVariant(checked ? 'variant9' : 'variant5');
+    setIsHovered(false);
+    setCurrentVariant(checked ? 'variant5' : 'default');
   };
 
   const handleMouseDown = () => {
@@ -58,7 +63,7 @@ export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
   };
 
   const handleMouseUp = () => {
-    setCurrentVariant('variant4');
+    setCurrentVariant(checked ? 'variant5' : 'variant4');
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -70,7 +75,7 @@ export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
     setTimeout(() => {
       setCurrentVariant('variant2');
       setTimeout(() => {
-        setCurrentVariant('variant9');
+        setCurrentVariant(checked ? 'variant5' : 'variant9');
       }, 0);
     }, 0);
   };
@@ -88,7 +93,7 @@ export const Checkbox = ({ checked, onChange, label }: CheckboxProps) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
       >
-        {checked && (
+        {(checked || effectiveHoverState) && (
           <svg 
             className={`w-3 h-3 ${getCheckmarkColor()}`}
             viewBox="0 0 12 12"

@@ -8,7 +8,7 @@ export const DoneButton = ({ onClick }: DoneButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-black py-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+      className="w-full mt-3 bg-[#FFCE22] hover:bg-[#FFD84D] active:bg-[#FFD84D] text-black py-2 rounded-md transition-colors duration-200 focus:outline-none"
     >
       Done
     </button>
